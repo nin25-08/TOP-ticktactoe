@@ -3,17 +3,23 @@ const grid = document.querySelector(".grid")
 const pname = document.querySelector(".player-name")
 const dialog = document.querySelector("dialog");
 
+const openingSequence =  document.querySelector(".opening-sequence");
 const newGameBtn =  document.querySelector(".new-game");
 const playAgainBtn = document.querySelector(".play-again");
 
 const playerBtns = document.querySelectorAll(".player-btn")
-let playerSelection = ""
+let playerSelection = "X"
 playerBtns.forEach(button=>{
     button.addEventListener("click",e=>{
         playerBtns.forEach(btn => btn.classList.remove('selected'));
         e.target.classList.add("selected")
         playerSelection = e.target.dataset.choice;
     })
+})
+
+newGameBtn.addEventListener("click",e=>{
+    openingSequence.classList.add("hidden")
+    UIcreateBoard()
 })
 
 function Player(name, marker) {
