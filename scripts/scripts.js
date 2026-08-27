@@ -3,9 +3,46 @@ const grid = document.querySelector(".grid")
 const pname = document.querySelector(".player-name")
 const dialog = document.querySelector("dialog");
 
+const newGameBtn =  document.querySelector(".new-game");
+const playAgainBtn = document.querySelector(".play-again");
+
+const playerBtns = document.querySelectorAll(".player-btn")
+let playerSelection = ""
+playerBtns.forEach(button=>{
+    button.addEventListener("click",e=>{
+        playerBtns.forEach(btn => btn.classList.remove('selected'));
+        e.target.classList.add("selected")
+        playerSelection = e.target.dataset.choice;
+    })
+})
+
+function Player(name, marker) {
+    this.name = name;
+    this.marker = marker;
+}
+
+const player1 = new Player("Player1", "X")
+const player2 = new Player("Player2", "O")
+
+const createPlayerHandler = ((player1, player2) => {
+    let currentPlayer = player1;
+    const getCurrentPlayer = () => {
+        return currentPlayer;
+    }
+    const togglePlayer = () => {
+        if (currentPlayer == player1) {
+            currentPlayer = player2
+        } else {
+            currentPlayer = player1
+        }
+    }
+    return { getCurrentPlayer, togglePlayer }
+})
+
+const playerHandler = createPlayerHandler(player1, player2)
 
 const board = (() => {
-    let gameBoard =
+    const gameBoard =
         [["", "", ""],
         ["", "", ""],
         ["", "", ""]];
@@ -24,12 +61,23 @@ const board = (() => {
             return "invalidMove";
         }
     })
+
     const isGameOver = ((value) => {
         let rows = [[gameBoard[0][0], gameBoard[0][1], gameBoard[0][2]], [gameBoard[1][0], gameBoard[1][1], gameBoard[1][2]], [gameBoard[2][0], gameBoard[2][1], gameBoard[2][2]]]
         let cols = [[gameBoard[0][0], gameBoard[1][0], gameBoard[2][0]], [gameBoard[0][1], gameBoard[1][1], gameBoard[2][1]], [gameBoard[0][2], gameBoard[1][2], gameBoard[2][2]]]
         let diag = [[gameBoard[0][0], gameBoard[1][1], gameBoard[2][2]], [gameBoard[0][2], gameBoard[1][1], gameBoard[2][0]]]
 
         return evaluateLine(rows, value) || evaluateLine(cols, value) || evaluateLine(diag, value)
+    })
+
+    const isBoardFull = (() => {
+        for (let i = 0; i < gameBoard.length; i++) {
+            for (let j = 0; j < gameBoard[i].length; j++) {
+                if (gameBoard[i][j] === "")
+                    return false;
+            }
+        }
+        return true
     })
     const evaluateLine = ((line, value) => {
         for (let i = 0; i < line.length; i++) {
@@ -52,74 +100,82 @@ const board = (() => {
         }
     })
 
-    const clearBoard = (() => {
-        gameBoard =
-            [["","",""],
-            ["", "",""],
-            ["","",""]];
-
-    })
-
-    return { getBoard, makeMove, printBoard, clearBoard, isGameOver}
+    const clearBoard = () => {
+        for (let i = 0; i < gameBoard.length; i++) {
+            for (let j = 0; j < gameBoard[i].length; j++) {
+                gameBoard[i][j] = "";
+            }
+        }
+    }
+    return { getBoard, makeMove, printBoard, clearBoard, isGameOver ,isBoardFull}
 })();
 
-function Player(name, marker) {
-    this.name = name;
-    this.marker = marker;
-}
 
-
-
-function displayBoard() {
+function UIcreateBoard() {
     for (let i = 0; i < 3; i++) {
         const row = document.createElement("div");
-        row.className="row"
+        row.className = "row"
         for (let j = 0; j < 3; j++) {
             const elem = document.createElement("div");
-            elem.className="square"
+            elem.className = "square"
             elem.dataset.row = i
-            elem.dataset.col=j
+            elem.dataset.col = j
             row.appendChild(elem)
         }
         grid.appendChild(row)
     }
 }
-const createPlayerHandler = ((player1,player2)=>{
-    let currentPlayer=player1;
-    const getCurrentPlayer = ()=>{
-        return currentPlayer;
-    }
-    const togglePlayer = ()=>{
-        if(currentPlayer==player1){
-            currentPlayer=player2
-        }else{
-            currentPlayer=player1
-        }
-    }
-    return {getCurrentPlayer,togglePlayer}
-})
 
-const player1=new Player("Jhon","X")
-const player2=new Player("Lebron","O")
+function UIclearBoard() {
+    const allSquares = document.querySelectorAll(".square");
 
-const playerHandler=createPlayerHandler(player1,player2)
-body.addEventListener("click",(e)=>{
-    if(e.target.className=="square"){
-        const currentPlayer=playerHandler.getCurrentPlayer()
-        board.makeMove(currentPlayer.marker,e.target.dataset.row,e.target.dataset.col)
-        e.target.textContent=currentPlayer.marker
-
-        if(board.isGameOver(currentPlayer.marker)){
-            handleGameOver(currentPlayer)
-        }else{
-        playerHandler.togglePlayer()
-        board.printBoard()
-        }
-    }
-})
-function handleGameOver(player){
-    console.log("gameOver")
-    pname.textContent=player.name
-    dialog.show()
+    allSquares.forEach(square => {
+        square.textContent = "";
+    });
 }
-displayBoard();
+
+function UIhideBoard() {
+    grid.classList.add("hidden")
+}
+function UIshowBoard() {
+    grid.classList.remove("hidden")
+}
+
+body.addEventListener("click", (e) => {
+    if (e.target.className == "square" && e.target.textContent == "") {
+        const currentPlayer = playerHandler.getCurrentPlayer()
+        board.makeMove(currentPlayer.marker, e.target.dataset.row, e.target.dataset.col)
+        e.target.textContent = currentPlayer.marker
+
+        if (board.isGameOver(currentPlayer.marker)) {
+            handleGameOver(currentPlayer)
+        } else if (board.isBoardFull()) { 
+            handleTie();
+        }
+        else {
+            playerHandler.togglePlayer()
+            board.printBoard()
+        }
+    }
+})
+function handleGameOver(player) {
+    console.log("gameOver")
+    pname.textContent = player.name + " won!"
+    dialog.showModal()
+}
+function handleTie(){
+    console.log("gameOver")
+    pname.textContent = "It's a tie!"
+    dialog.showModal()
+}
+
+playAgainBtn.addEventListener("click",()=>{
+    board.clearBoard()
+    UIclearBoard()
+    dialog.close()
+
+})
+
+
+
+

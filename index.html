@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <script src="scripts/scripts.js" defer></script>
     <link rel="stylesheet" href="styles/index.css">
@@ -7,15 +8,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-     <div class="grid">
-         
+    <div class="opening-sequence">
+        <div class="top-elem">
+            <p class="x">X</p>
+            <p class="o">O</p>
         </div>
+        <div class="player-select">
+            <h5>PICK PLAYER 1'S MARK</h5>
+            <div class="btnSec">
+                <button class="player-btn selected" data-choice="X">X</button>
+                <button class="player-btn" data-choice="O">O</button>
+            </div>
+            <p>REMEMBER : X GOES FIRST</p>
+        </div>
+        <button class="new-game">NEW GAME (VS PLAYER)</button>
+
+    </div>
+    <div class="grid"></div>
     <dialog>
         <div class="winner-declaration">
             <p class="player-name"></p>
-             <p>won!</p>
+            <button class="play-again">Play Again!</button>
         </div>
     </dialog>
 </body>
+
 </html>

@@ -1,9 +1,142 @@
-.square{
+@font-face {
+    font-family: 'MyTicTacFont';
+
+
+    src: url("../fonts/Montserrat-Black.ttf") format('truetype');
+    /* Fallback if you have a .ttf file */
+
+
+    font-weight: 900;
+    font-style: normal;
+}
+
+:root {
+    --background-color: rgb(2, 32, 47);
+    --font-color: rgb(124, 163, 189);
+    --lighter-font-color: rgba(149, 196, 227, 0.405);
+    --darker-font-color: rgb(88, 116, 135);
+
+    --player-select-background: rgb(3, 45, 67);
+    --x-color: rgb(26, 188, 159);
+    --o-color: rgb(218, 168, 31);
+    --o-color-dark: rgb(180, 139, 26);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    color: var(--font-color);
+    align-items: center;
+    justify-content: center;
+    padding: 10% 20%;
+}
+
+* {
+    font-family: MyTicTacFont;
+    margin: 0px;
+}
+
+.x {
+    color: var(--x-color);
+}
+
+.o {
+    color: var(--o-color);
+}
+
+.square {
     outline: 1px solid black;
     width: 20px;
     height: 20px;
 }
 
-.row{
-    display:flex;
+.opening-sequence {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.top-elem {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.top-elem p {
+    font-size: 16px;
+}
+
+.player-select {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--player-select-background);
+    align-items: center;
+    padding: 40px 20px;
+    width: 30vw;
+    gap: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 2px rgba(0, 0, 0, 0.117);
+
+}
+
+.player-select h5 {
+    font-size: 16px;
+
+}
+
+.player-select p {
+    font-size: 10px;
+    color: var(--lighter-font-color);
+}
+
+.player-select .btnSec {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.player-select button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    align-items: center;
+    font-size: 28px;
+    border-radius: 5px;
+}
+
+.player-select .player-btn {
+    color: var(--background-color);
+    background-color: var(--font-color);
+
+    border-style: none;
+    cursor: pointer;
+    box-shadow: 0px 5px 5px black;
+}
+
+.player-btn.selected {
+    color: var(--font-color);
+    background-color: var(--background-color);
+    border-style: none;
+    box-shadow: none;
+}
+
+.new-game {
+    background-color: var(--o-color);
+    border-style: none;
+    height: 50px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 2px var(--o-color-dark);
+    letter-spacing: 2px;
+    font-size: 12px;
+}
+
+.row {
+    display: flex;
+}
+
+.hidden {
+    display: none;
 }
