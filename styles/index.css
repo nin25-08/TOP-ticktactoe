@@ -1,0 +1,9 @@
+.square{
+    outline: 1px solid black;
+    width: 20px;
+    height: 20px;
+}
+
+.row{
+    display:flex;
+}
